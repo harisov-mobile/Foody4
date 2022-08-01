@@ -9,6 +9,10 @@ plugins {
 // чтобы ktlint использовать
 apply from: "../ktlint.gradle"
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     compileSdk 32
 
@@ -20,6 +24,10 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // чтобы не "светить" Api ключ в публичном гит-хабе
+        buildConfigField 'String', 'SPOONACULAR_API_KEY', keystoreProperties['SPOONACULAR_API_KEY']
+        buildConfigField 'String', 'SPOONACULAR_BASE_URL', '"https://api.spoonacular.com/"'
     }
 
     buildTypes {
@@ -62,4 +70,17 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:$roomVersion")
 
+    // Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
+
+    // Gson
+    implementation "com.google.code.gson:gson:2.9.0"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$converterGsonVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$loggingInterceptorVersion"
+
+    // Glide
+    implementation "com.github.bumptech.glide:glide:$glideVersion"
 }
