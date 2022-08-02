@@ -3,9 +3,9 @@ package ru.internetcloud.foody4.data.mapper
 import ru.internetcloud.foody4.data.database.model.FoodRecipeDbModel
 import ru.internetcloud.foody4.data.entity.FoodRecipeWithIngredients
 import ru.internetcloud.foody4.data.network.dto.FoodRecipeDTO
+import ru.internetcloud.foody4.data.util.parseHtml
 import ru.internetcloud.foody4.domain.model.FoodRecipe
 import javax.inject.Inject
-import ru.internetcloud.foody4.data.util.parseHtml
 
 class FoodRecipeMapper @Inject constructor(
     private val extendedIngredientMapper: ExtendedIngredientMapper

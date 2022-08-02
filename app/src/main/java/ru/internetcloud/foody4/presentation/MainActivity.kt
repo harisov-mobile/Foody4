@@ -9,16 +9,20 @@ import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import ru.internetcloud.foody4.R
 import ru.internetcloud.foody4.domain.model.FoodRecipe
+import ru.internetcloud.foody4.presentation.flow.MainFlowFragment
 import ru.internetcloud.foody4.presentation.recipe_list.FoodRecipeListFragment
 
-class MainActivity : AppCompatActivity(), FoodRecipeListFragment.Callbacks {
+class MainActivity :
+    AppCompatActivity(),
+    MainFlowFragment.Callbacks,
+    FoodRecipeListFragment.OnFragmentRequestParentListener {
 
     private val cicerone: Cicerone<Router> = Cicerone.create()
     private val router = cicerone.router
     private val navigator: Navigator = AppNavigator(activity = this, R.id.container)
 
-//    private val currentFragment: Fragment?
-//        get() = supportFragmentManager.findFragmentById(R.id.container) as? Fragment
+    private val currentFragment: Fragment?
+        get() = supportFragmentManager.findFragmentById(R.id.container) as? Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,4 +47,8 @@ class MainActivity : AppCompatActivity(), FoodRecipeListFragment.Callbacks {
         router.navigateTo(Screens.getTabFlowScreen(foodRecipe))
     }
 
+    override fun getParentFragment(): Fragment? {
+
+        return currentFragment
+    }
 }

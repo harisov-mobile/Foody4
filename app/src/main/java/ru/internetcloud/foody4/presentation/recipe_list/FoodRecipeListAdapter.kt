@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import javax.inject.Inject
 import ru.internetcloud.beer.presentation.util.loadImage
 import ru.internetcloud.foody4.databinding.ItemRecipeListBinding
 import ru.internetcloud.foody4.domain.model.FoodRecipe
+import javax.inject.Inject
 
 class FoodRecipeListAdapter @Inject constructor() : ListAdapter<FoodRecipe, FoodRecipeListViewHolder>(FoodRecipeDiffCallback()) {
 

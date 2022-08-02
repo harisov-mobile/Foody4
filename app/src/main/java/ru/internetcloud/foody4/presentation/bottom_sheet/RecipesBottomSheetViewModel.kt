@@ -1,8 +1,8 @@
 package ru.internetcloud.foody4.presentation.bottom_sheet
 
 import androidx.lifecycle.ViewModel
-import javax.inject.Inject
 import ru.internetcloud.foody4.domain.model.FoodFilter
+import javax.inject.Inject
 
 class RecipesBottomSheetViewModel @Inject constructor() : ViewModel() {
 

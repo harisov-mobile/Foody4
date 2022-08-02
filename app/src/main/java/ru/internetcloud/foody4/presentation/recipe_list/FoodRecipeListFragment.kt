@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentResultListener
 import androidx.lifecycle.ViewModelProvider
-import javax.inject.Inject
 import ru.internetcloud.foody4.FoodyApp
 import ru.internetcloud.foody4.R
 import ru.internetcloud.foody4.databinding.FragmentRecipeListBinding
@@ -18,6 +17,7 @@ import ru.internetcloud.foody4.domain.model.FoodFilter
 import ru.internetcloud.foody4.domain.model.FoodRecipe
 import ru.internetcloud.foody4.domain.model.Result
 import ru.internetcloud.foody4.presentation.bottom_sheet.RecipesBottomSheetFragment
+import javax.inject.Inject
 
 class FoodRecipeListFragment : Fragment(), FragmentResultListener {
 
@@ -25,7 +25,11 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
         fun onFoodRecipeItemClick(foodRecipe: FoodRecipe)
     }
 
-    private var hostActivity: Callbacks? = null
+    interface OnFragmentRequestParentListener {
+        fun getParentFragment(): Fragment?
+    }
+
+    private var parentFragment: Callbacks? = null
 
     // даггер:
     @Inject
@@ -52,7 +56,10 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        hostActivity = context as Callbacks
+        val hostActivity = context as OnFragmentRequestParentListener
+        hostActivity.getParentFragment()?.let {
+            parentFragment = it as Callbacks
+        }
 
         // даггер:
         component.inject(this)
@@ -81,8 +88,7 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
 
     private fun setupClickListeners() {
         foodRecipeListAdapter.onFoodRecipeClickListener = { foodRecipe ->
-            // Toast.makeText(context, "go to EditRecipe", Toast.LENGTH_LONG).show()
-            hostActivity?.onFoodRecipeItemClick(foodRecipe)
+            parentFragment?.onFoodRecipeItemClick(foodRecipe)
         }
 
         binding.tryAgainButton.setOnClickListener {
@@ -155,7 +161,7 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
     override fun onDetach() {
         super.onDetach()
 
-        hostActivity = null
+        parentFragment = null
     }
 
     override fun onFragmentResult(requestKey: String, result: Bundle) {

@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.internetcloud.foody4.BuildConfig
@@ -17,6 +16,7 @@ import ru.internetcloud.foody4.domain.model.Result
 import ru.internetcloud.foody4.domain.usecase.GetFoodRecipesUseCase
 import ru.internetcloud.foody4.domain.usecase.ReadFoodFilterUseCase
 import ru.internetcloud.foody4.domain.usecase.SaveFoodFilterUseCase
+import javax.inject.Inject
 
 class FoodRecipeListViewModel @Inject constructor(
     private val getFoodRecipesUseCase: GetFoodRecipesUseCase,

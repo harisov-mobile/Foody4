@@ -9,13 +9,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import javax.inject.Inject
 import ru.internetcloud.foody4.FoodyApp
 import ru.internetcloud.foody4.databinding.FragmentRecipesBottomSheetBinding
 import ru.internetcloud.foody4.di.ViewModelFactory
 import ru.internetcloud.foody4.domain.model.DietChipTag
 import ru.internetcloud.foody4.domain.model.FoodFilter
 import ru.internetcloud.foody4.domain.model.MealChipTag
+import javax.inject.Inject
 
 class RecipesBottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -32,8 +32,6 @@ class RecipesBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentRecipesBottomSheetBinding? = null
     private val binding: FragmentRecipesBottomSheetBinding
         get() = _binding ?: throw IllegalStateException("Error FragmentRecipesBottomSheetBinding is NULL")
-
-
 
     companion object {
 

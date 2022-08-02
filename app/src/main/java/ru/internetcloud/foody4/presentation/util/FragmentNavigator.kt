@@ -20,14 +20,14 @@ class FragmentNavigator constructor(
     protected val fragmentManager: FragmentManager,
     protected val parentFragmentManager: FragmentManager,
     protected val fragmentFactory: FragmentFactory = fragmentManager.fragmentFactory
-): Navigator {
+) : Navigator {
 
     protected val localStackCopy = mutableListOf<String>()
 
     override fun applyCommands(commands: Array<out Command>) {
         fragmentManager.executePendingTransactions()
 
-        //copy stack before apply commands
+        // copy stack before apply commands
         copyStackToLocal()
 
         for (command in commands) {
@@ -191,5 +191,4 @@ class FragmentNavigator constructor(
     ) {
         throw error
     }
-
 }

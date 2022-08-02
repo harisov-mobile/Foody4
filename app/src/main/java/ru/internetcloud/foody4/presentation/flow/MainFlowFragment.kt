@@ -14,10 +14,16 @@ import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.Router
 import ru.internetcloud.foody4.R
+import ru.internetcloud.foody4.domain.model.FoodRecipe
 import ru.internetcloud.foody4.presentation.Screens
+import ru.internetcloud.foody4.presentation.recipe_list.FoodRecipeListFragment
 import ru.internetcloud.foody4.presentation.util.FragmentNavigator
 
-class MainFlowFragment : Fragment() {
+class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
+
+    interface Callbacks {
+        fun onFoodRecipeItemClick(foodRecipe: FoodRecipe)
+    }
 
     private val cicerone: Cicerone<Router> = Cicerone.create()
     private val router = cicerone.router
@@ -29,8 +35,12 @@ class MainFlowFragment : Fragment() {
     private val currentFragment: Fragment?
         get() = childFragmentManager.findFragmentById(R.id.container)
 
+    private var hostActivity: Callbacks? = null
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        hostActivity = context as Callbacks
 
         navigator = FragmentNavigator(
             containerId = R.id.main_flow_fragment_container,
@@ -59,7 +69,6 @@ class MainFlowFragment : Fragment() {
         if (savedInstanceState == null) {
             bottomNavigationBar.selectTab(0, true)
         }
-
     }
 
     private fun initViews() {
@@ -107,4 +116,14 @@ class MainFlowFragment : Fragment() {
         super.onPause()
     }
 
+    override fun onDetach() {
+        super.onDetach()
+
+        hostActivity = null
+    }
+
+    override fun onFoodRecipeItemClick(foodRecipe: FoodRecipe) {
+        // или фрагмент сам будет обрабатывать или отправит наверх:
+        hostActivity?.onFoodRecipeItemClick(foodRecipe) // отправим на уровень вверх
+    }
 }

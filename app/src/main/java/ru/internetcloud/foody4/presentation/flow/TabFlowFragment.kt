@@ -15,7 +15,7 @@ import ru.internetcloud.foody4.R
 import ru.internetcloud.foody4.domain.model.FoodRecipe
 import ru.internetcloud.foody4.presentation.util.FragmentNavigator
 
-class TabFlowFragment: Fragment() {
+class TabFlowFragment : Fragment() {
 
     private val cicerone: Cicerone<Router> = Cicerone.create()
     private val router = cicerone.router
@@ -34,7 +34,6 @@ class TabFlowFragment: Fragment() {
                 arguments = args
             }
         }
-
     }
 
     override fun onAttach(context: Context) {
@@ -63,7 +62,7 @@ class TabFlowFragment: Fragment() {
         }
 
         if (savedInstanceState == null) {
-            //bottomNavigationBar.selectTab(0, true)
+            // bottomNavigationBar.selectTab(0, true)
         }
     }
 
@@ -72,7 +71,5 @@ class TabFlowFragment: Fragment() {
         arguments?.let { args ->
             val foodRecipe = args.getParcelable<FoodRecipe>(FOOD_RECIPE_KEY)
         }
-
     }
-
 }
