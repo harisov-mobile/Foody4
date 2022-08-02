@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="normal_margin">8dp</dimen>
+    <dimen name="small_margin">4dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
+    <dimen name="item_left_clock_margin">28dp</dimen>
+</resources>

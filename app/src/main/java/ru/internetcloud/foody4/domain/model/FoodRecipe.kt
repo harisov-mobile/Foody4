@@ -1,5 +1,9 @@
 package ru.internetcloud.foody4.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class FoodRecipe(
     val recipeId: Int,
     val title: String,
@@ -16,4 +20,4 @@ data class FoodRecipe(
     val vegan: Boolean,
     val vegetarian: Boolean,
     val veryHealthy: Boolean
-)
+) : Parcelable

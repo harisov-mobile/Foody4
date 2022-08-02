@@ -5,6 +5,7 @@ import ru.internetcloud.foody4.data.entity.FoodRecipeWithIngredients
 import ru.internetcloud.foody4.data.network.dto.FoodRecipeDTO
 import ru.internetcloud.foody4.domain.model.FoodRecipe
 import javax.inject.Inject
+import ru.internetcloud.foody4.data.util.parseHtml
 
 class FoodRecipeMapper @Inject constructor(
     private val extendedIngredientMapper: ExtendedIngredientMapper
@@ -71,7 +72,7 @@ class FoodRecipeMapper @Inject constructor(
             extendedIngredients = extendedIngredientMapper.fromDTOListToDomainList(foodRecipeDTO.extendedIngredients),
             glutenFree = foodRecipeDTO.glutenFree,
             image = foodRecipeDTO.image ?: "",
-            summary = foodRecipeDTO.summary,
+            summary = parseHtml(foodRecipeDTO.summary),
             readyInMinutes = foodRecipeDTO.readyInMinutes,
             sourceName = foodRecipeDTO.sourceName,
             sourceUrl = foodRecipeDTO.sourceUrl,

@@ -43,6 +43,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -83,4 +87,13 @@ dependencies {
 
     // Glide
     implementation "com.github.bumptech.glide:glide:$glideVersion"
+
+    // Bottom Bar
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.2.0'
+
+    //Cicerone
+    implementation("com.github.terrakok:cicerone:7.1")
+
+    // Jsoup
+    implementation 'org.jsoup:jsoup:1.13.1'
 }
