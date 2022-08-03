@@ -144,12 +144,14 @@ class TabFlowFragment : Fragment() {
 
         Log.i("rustam", " pagerAdapter - ${pagerAdapter}")
 
-        binding.viewPager.isUserInputEnabled = false
-        binding.viewPager.adapter = pagerAdapter
+        showFragment(fragments[0])
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = titles[position]
-        }.attach()
+//        binding.viewPager.isUserInputEnabled = false
+//        binding.viewPager.adapter = pagerAdapter
+//
+//        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+//            tab.text = titles[position]
+//        }.attach()
     }
 
     override fun onDestroyView() {
@@ -157,4 +159,18 @@ class TabFlowFragment : Fragment() {
 
         _binding = null
     }
+
+    private fun showFragmentWithBackStack(fragment: Fragment) {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.temp_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.temp_container, fragment)
+            .commit()
+    }
+
 }

@@ -17,6 +17,8 @@ import com.github.terrakok.cicerone.Router
 import ru.internetcloud.foody4.R
 import ru.internetcloud.foody4.domain.model.FoodRecipe
 import ru.internetcloud.foody4.presentation.Screens
+import ru.internetcloud.foody4.presentation.favorites.FavoriteRecipeListFragment
+import ru.internetcloud.foody4.presentation.joke.FoodJokeFragment
 import ru.internetcloud.foody4.presentation.recipe_list.FoodRecipeListFragment
 import ru.internetcloud.foody4.presentation.util.FragmentNavigator
 
@@ -26,9 +28,9 @@ class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
         fun onFoodRecipeItemClick(foodRecipe: FoodRecipe)
     }
 
-    private val cicerone: Cicerone<Router> = Cicerone.create()
-    private val router = cicerone.router
-    private lateinit var navigator: Navigator
+//    private val cicerone: Cicerone<Router> = Cicerone.create()
+//    private val router = cicerone.router
+//    private lateinit var navigator: Navigator
 
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNavigationBar: BottomNavigationBar
@@ -49,11 +51,11 @@ class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        navigator = FragmentNavigator(
-            containerId = R.id.main_flow_fragment_container,
-            fragmentManager = childFragmentManager,
-            parentFragmentManager = parentFragmentManager
-        )
+//        navigator = FragmentNavigator(
+//            containerId = R.id.main_flow_fragment_container,
+//            fragmentManager = childFragmentManager,
+//            parentFragmentManager = parentFragmentManager
+//        )
 
         Log.i("rustam", " onCreate - $this")
     }
@@ -97,15 +99,18 @@ class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
                 when (position) {
                     0 -> {
                         toolbar.title = getString(R.string.recipes)
-                        router.newRootScreen(Screens.getFoodRecipeListScreen())
+                        // router.newRootScreen(Screens.getFoodRecipeListScreen())
+                        showFragment(FoodRecipeListFragment())
                     }
                     1 -> {
                         toolbar.title = getString(R.string.favorite_recipes)
-                        router.newRootScreen(Screens.getFavoriteRecipeListScreen())
+                        // router.newRootScreen(Screens.getFavoriteRecipeListScreen())
+                        showFragment(FavoriteRecipeListFragment())
                     }
                     2 -> {
                         toolbar.title = getString(R.string.joke)
-                        router.newRootScreen(Screens.getFoodJokeScreen())
+                        // router.newRootScreen(Screens.getFoodJokeScreen())
+                        showFragment(FoodJokeFragment())
                     }
                 }
                 bottomNavigationBar.selectTab(position, false)
@@ -119,15 +124,15 @@ class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
-        cicerone.getNavigatorHolder().setNavigator(navigator)
-    }
-
-    override fun onPause() {
-        cicerone.getNavigatorHolder().removeNavigator()
-        super.onPause()
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        cicerone.getNavigatorHolder().setNavigator(navigator)
+//    }
+//
+//    override fun onPause() {
+//        cicerone.getNavigatorHolder().removeNavigator()
+//        super.onPause()
+//    }
 
     override fun onDetach() {
         super.onDetach()
@@ -139,4 +144,18 @@ class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
         // или фрагмент сам будет обрабатывать или отправит наверх:
         hostActivity?.onFoodRecipeItemClick(foodRecipe) // отправим на уровень вверх
     }
+
+    private fun showFragmentWithBackStack(fragment: Fragment) {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.main_flow_fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    private fun showFragment(fragment: Fragment) {
+        childFragmentManager.beginTransaction()
+            .replace(R.id.main_flow_fragment_container, fragment)
+            .commit()
+    }
+
 }
