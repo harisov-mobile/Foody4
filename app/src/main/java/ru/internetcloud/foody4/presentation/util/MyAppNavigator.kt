@@ -1,7 +1,10 @@
 package ru.internetcloud.foody4.presentation.util
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -14,12 +17,11 @@ import com.github.terrakok.cicerone.Replace
 import com.github.terrakok.cicerone.Screen
 import com.github.terrakok.cicerone.androidx.ActivityScreen
 import com.github.terrakok.cicerone.androidx.FragmentScreen
-import java.lang.IllegalStateException
 
-class FragmentNavigator constructor(
+class MyAppNavigator constructor(
+    protected val activity: FragmentActivity,
     protected val containerId: Int,
-    protected val fragmentManager: FragmentManager,
-    protected val parentFragmentManager: FragmentManager,
+    protected val fragmentManager: FragmentManager = activity.supportFragmentManager,
     protected val fragmentFactory: FragmentFactory = fragmentManager.fragmentFactory
 ) : Navigator {
 
@@ -29,10 +31,10 @@ class FragmentNavigator constructor(
         try {
             fragmentManager.executePendingTransactions()
         } catch (e: Exception) {
-            Log.i("rustam", " exception in FragmentNavigator = ${e.toString()}")
+            Log.i("rustam", " exception in MyAppNavigator = ${e.toString()}")
         }
 
-        // copy stack before apply commands
+        //copy stack before apply commands
         copyStackToLocal()
 
         for (command in commands) {
@@ -68,7 +70,7 @@ class FragmentNavigator constructor(
     protected open fun forward(command: Forward) {
         when (val screen = command.screen) {
             is ActivityScreen -> {
-                throw IllegalStateException("ActivityScreen is forbidden here")
+                checkAndStartActivity(screen)
             }
             is FragmentScreen -> {
                 commitNewFragmentScreen(screen, true)
@@ -79,7 +81,8 @@ class FragmentNavigator constructor(
     protected open fun replace(command: Replace) {
         when (val screen = command.screen) {
             is ActivityScreen -> {
-                throw IllegalStateException("ActivityScreen is forbidden here")
+                checkAndStartActivity(screen)
+                activity.finish()
             }
             is FragmentScreen -> {
                 if (localStackCopy.isNotEmpty()) {
@@ -103,8 +106,7 @@ class FragmentNavigator constructor(
     }
 
     protected open fun activityBack() {
-        // activity.finish()
-        parentFragmentManager.popBackStack()
+        activity.finish()
     }
 
     protected open fun commitNewFragmentScreen(
@@ -174,6 +176,29 @@ class FragmentNavigator constructor(
         // Do nothing by default
     }
 
+    private fun checkAndStartActivity(screen: ActivityScreen) {
+        // Check if we can start activity
+        val activityIntent = screen.createIntent(activity)
+        try {
+            activity.startActivity(activityIntent, screen.startActivityOptions)
+        } catch (e: ActivityNotFoundException) {
+            unexistingActivity(screen, activityIntent)
+        }
+    }
+
+    /**
+     * Called when there is no activity to open `screenKey`.
+     *
+     * @param screen         screen
+     * @param activityIntent intent passed to start Activity for the `screenKey`
+     */
+    protected open fun unexistingActivity(
+        screen: ActivityScreen,
+        activityIntent: Intent
+    ) {
+        // Do nothing by default
+    }
+
     /**
      * Called when we tried to fragmentBack to some specific screen (via [BackTo] command),
      * but didn't found it.
@@ -197,3 +222,4 @@ class FragmentNavigator constructor(
         throw error
     }
 }
+

@@ -2,7 +2,6 @@ package ru.internetcloud.foody4.presentation.recipe_list
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -32,14 +31,14 @@ class FoodRecipeListViewModel @Inject constructor(
     var foodFilter: FoodFilter = readFoodFilterUseCase.readFoodFilter(application)
 
     init {
-        Log.i("rustam", "init")
+        // Log.i("rustam", "init")
         fetchFoodRecipes(loadFromApi = false)
     }
 
     fun fetchFoodRecipes(loadFromApi: Boolean) {
         viewModelScope.launch {
             _result.value = Result.Loading
-            delay(3000)
+            // delay(3000)
 
             val queries = getQueryMap()
 
@@ -56,7 +55,7 @@ class FoodRecipeListViewModel @Inject constructor(
         queryMap["addRecipeInformation"] = "true"
         queryMap["fillIngredients"] = "true"
 
-        Log.i("rustam", "foodFilter.mealType = ${foodFilter.mealTypeTag}, foodFilter.dietType = ${foodFilter.dietTypeTag}")
+        // Log.i("rustam", "foodFilter.mealType = ${foodFilter.mealTypeTag}, foodFilter.dietType = ${foodFilter.dietTypeTag}")
 
         return queryMap
     }

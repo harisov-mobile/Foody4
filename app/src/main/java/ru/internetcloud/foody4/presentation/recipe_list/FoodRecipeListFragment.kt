@@ -25,12 +25,6 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
         fun onFoodRecipeItemClick(foodRecipe: FoodRecipe)
     }
 
-    interface OnFragmentRequestParentListener {
-        fun getParentFragment(): Fragment?
-    }
-
-    private var parentFragment: Callbacks? = null
-
     // даггер:
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -56,13 +50,16 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        val hostActivity = context as OnFragmentRequestParentListener
-        hostActivity.getParentFragment()?.let {
-            parentFragment = it as Callbacks
-        }
+        Log.i("rustam", " onAttach - $this")
 
         // даггер:
         component.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        Log.i("rustam", " onCreate - $this")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,12 +70,16 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        Log.i("rustam", " onViewCreated - 1 - $this")
+
         foodRecipeListViewModel = ViewModelProvider(this, viewModelFactory).get(FoodRecipeListViewModel::class.java)
 
         setupFoodRecipeRecyclerView()
         setupClickListeners()
         observeViewModel()
         setupFragmentResultListeners()
+
+        Log.i("rustam", " onViewCreated - 2 - $this")
     }
 
     private fun setupFoodRecipeRecyclerView() {
@@ -88,7 +89,12 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
 
     private fun setupClickListeners() {
         foodRecipeListAdapter.onFoodRecipeClickListener = { foodRecipe ->
-            parentFragment?.onFoodRecipeItemClick(foodRecipe)
+            // parentFragment?.onFoodRecipeItemClick(foodRecipe)
+
+            val parentFr = getParentFragment()
+            parentFr?.let {
+                (it as Callbacks).onFoodRecipeItemClick(foodRecipe)
+            }
         }
 
         binding.tryAgainButton.setOnClickListener {
@@ -136,9 +142,9 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
                     } else {
                         val kol = currentResult.data.size
                         for (i in 0 until kol) {
-                            Log.i("rustam", "recipeId = ${currentResult.data.get(i).recipeId}")
+                            // Log.i("rustam", "recipeId = ${currentResult.data.get(i).recipeId}")
                         }
-                        Log.i("rustam", "--------------------------")
+                        // Log.i("rustam", "--------------------------")
 
                         foodRecipeListAdapter.submitList(currentResult.data)
                         binding.shimmerFrameLayout.visibility = View.GONE
@@ -156,12 +162,6 @@ class FoodRecipeListFragment : Fragment(), FragmentResultListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-
-        parentFragment = null
     }
 
     override fun onFragmentResult(requestKey: String, result: Bundle) {

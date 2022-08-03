@@ -28,6 +28,7 @@ android {
         // чтобы не "светить" Api ключ в публичном гит-хабе
         buildConfigField 'String', 'SPOONACULAR_API_KEY', keystoreProperties['SPOONACULAR_API_KEY']
         buildConfigField 'String', 'SPOONACULAR_BASE_URL', '"https://api.spoonacular.com/"'
+        buildConfigField 'String', 'SPOONACULAR_BASE_IMAGE_URL', '"https://spoonacular.com/cdn/ingredients_100x100/"'
     }
 
     buildTypes {

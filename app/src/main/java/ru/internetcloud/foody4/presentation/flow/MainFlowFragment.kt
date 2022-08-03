@@ -2,6 +2,7 @@ package ru.internetcloud.foody4.presentation.flow
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,30 +33,40 @@ class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
     private lateinit var toolbar: Toolbar
     private lateinit var bottomNavigationBar: BottomNavigationBar
 
-    private val currentFragment: Fragment?
-        get() = childFragmentManager.findFragmentById(R.id.container)
+//    private val currentFragment: Fragment?
+//        get() = childFragmentManager.findFragmentById(R.id.container)
 
     private var hostActivity: Callbacks? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
+        Log.i("rustam", " onAttach - $this")
+
         hostActivity = context as Callbacks
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         navigator = FragmentNavigator(
             containerId = R.id.main_flow_fragment_container,
             fragmentManager = childFragmentManager,
             parentFragmentManager = parentFragmentManager
         )
+
+        Log.i("rustam", " onCreate - $this")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
+        Log.i("rustam", " onCreateView - $this")
         return inflater.inflate(R.layout.fragment_main_flow, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Log.i("rustam", " onViewCreated - 1 - $this")
 
         toolbar = view.findViewById(R.id.toolbar)
         toolbar.setNavigationOnClickListener {
@@ -69,6 +80,8 @@ class MainFlowFragment : Fragment(), FoodRecipeListFragment.Callbacks {
         if (savedInstanceState == null) {
             bottomNavigationBar.selectTab(0, true)
         }
+
+        Log.i("rustam", " onViewCreated - 2 - $this")
     }
 
     private fun initViews() {
